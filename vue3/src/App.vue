@@ -7,29 +7,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, watch, reactive } from 'vue';
 import TodoList from './components/TodoList.vue';
 import AddTodo from './components/AddTodo.vue';
 import { Todo } from './types/todo';
 
 export default defineComponent({
-  name: 'App',
-  components: {
-    TodoList,
-    AddTodo
-  },
-  setup(){
-    const todos = ref<Todo[]>([]);
+    name: 'App',
+    components: {
+      TodoList,
+      AddTodo
+    },
+    setup(){
+      const todos = reactive<Todo[]>([]);
 
-    const addTodo = (text: string) => {
-      todos.value.push({ id: Date.now(), text });
-    }
+  const addTodo = (text: string) => {
+    todos.push({ id: Date.now(), text });
+    console.log('Todo added:', todos);
+  };
 
-    const deleteTodo = (id: number) => {
-      const newTodos = todos.value.filter(todo => todo.id !== id);
-      console.log('Todo deleted. Updated todos:', todos.value);
-      todos.value = [...newTodos];
+  const deleteTodo = (id: number) => {
+    const index = todos.findIndex((todo: Todo) => todo.id === id);
+    if (index !== -1) {
+      todos.splice(index, 1);
+      console.log('Todo deleted. Updated todos:', todos);
     }
+  };
+
+  watch(todos, (newTodos) => {
+    console.log('Todos updated:', newTodos);
+  });
 
     return{
       todos,
