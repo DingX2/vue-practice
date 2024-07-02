@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Todo List</h1>
-    <TodoList :todos="todos" />
+    <TodoList :todos="todos" @delete-todo="deleteTodo"/>
     <AddTodo @add-todo="addTodo"/>
   </div>
 </template>
@@ -21,13 +21,20 @@ export default defineComponent({
   setup(){
     const todos = ref<Todo[]>([]);
 
-    const addTodo = (text: string) =>{
+    const addTodo = (text: string) => {
       todos.value.push({ id: Date.now(), text });
+    }
+
+    const deleteTodo = (id: number) => {
+      const newTodos = todos.value.filter(todo => todo.id !== id);
+      console.log('Todo deleted. Updated todos:', todos.value);
+      todos.value = [...newTodos];
     }
 
     return{
       todos,
-      addTodo
+      addTodo,
+      deleteTodo
     }
   }
 });

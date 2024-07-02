@@ -15,9 +15,15 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  emit : ['delete-todo'],
+  setup(props, { emit }) {
+    const deleteTodo = (id: number)=> {
+      emit('delete-todo', id);
+    }
+
     return{
-      todos: props.todos
+      todos: props.todos,
+      deleteTodo
     }
   }
 });
@@ -26,10 +32,27 @@ export default defineComponent({
 <template>
   <div>
     <ul>
-      <li v-for="todo in todos" :key="todo.id">{{ todo.text }}</li>
+      <li v-for="todo in todos" :key="todo.id" class="todo-item">{{ todo.text }}
+        <button type="button" class="delete-btn" @click="deleteTodo(todo.id)"> delete </button>
+      </li>
     </ul>
   </div>
 </template>
 
 <style scoped>
+  .todo-item {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .delete-btn {
+    display: none;
+    margin-left: 1rem;
+  }
+
+  .todo-item:hover .delete-btn {
+    display: block;
+    transition: all 0.3s;
+  }
 </style>
