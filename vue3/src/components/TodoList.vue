@@ -1,18 +1,24 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, PropType } from 'vue';
+
+interface Todo {
+  id: number;
+  text: string;
+}
 
 // Composition API 사용
 export default defineComponent({
   name: 'TodoList',
-  setup() {
-    const todos = ref([
-      { id: 1, text: '더미데이터' },
-      { id: 2, text: '더미데이터2' }
-    ]);
-
-    return {
-      todos
-    };
+  props: {
+    todos:{
+      type: Array as PropType<Todo[]>,
+      required: true
+    }
+  },
+  setup(props) {
+    return{
+      todos: props.todos
+    }
   }
 });
 </script>

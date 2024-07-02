@@ -1,18 +1,34 @@
 <template>
   <div id="app">
     <h1>Todo List</h1>
-    <TodoList />
+    <TodoList :todos="todos" />
+    <AddTodo @add-todo="addTodo"/>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import TodoList from './components/TodoList.vue';
+import AddTodo from './components/AddTodo.vue';
+import { Todo } from './types/todo';
 
 export default defineComponent({
   name: 'App',
   components: {
-    TodoList
+    TodoList,
+    AddTodo
+  },
+  setup(){
+    const todos = ref<Todo[]>([]);
+
+    const addTodo = (text: string) =>{
+      todos.value.push({ id: Date.now(), text });
+    }
+
+    return{
+      todos,
+      addTodo
+    }
   }
 });
 </script>
